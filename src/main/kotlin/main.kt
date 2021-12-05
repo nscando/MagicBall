@@ -20,19 +20,81 @@ val respuestas = mapOf(
 
 fun main(args: Array<String>) {
 
-    println("Hola soy tu Bola 8 Magica, creada en Kotlin. Cual de estas opciones deseas realizar ")
-    println("1. Realizar una Pregunta")
-    println("2. Revisar todas la respuestas")
-    println("3. Salir")
+    while (true) {
 
-    val valorIngresado = readLine()
+        println("Hola soy tu Bola 8 Magica, creada en Kotlin. ¿Cual de estas opciones deseas realizar?")
+        println("1. Realizar una Pregunta")
+        println("2. Revisar todas la respuestas")
+        println("3. Salir")
 
-    when (valorIngresado) {
-        "1" -> realizarPregunta()
-        "2" -> mostrarRespuestas()
-        "3" -> salir()
-        else -> mostrarError()
+        val valorIngresado = readLine()
+
+        when (valorIngresado) {
+            "1" -> realizarPregunta()
+            "2" -> mostrarRespuestas()
+            "3" -> {
+                salir()
+                break
+            }
+            else -> mostrarError()
+        }
+        println()
     }
 
 }
 
+fun mostrarError() {
+    println("Vaya, parece que elegiste una opcion no valida, intenta de nuevo.")
+}
+
+fun salir() {
+    println("Hasta luego!")
+}
+
+fun mostrarRespuestas() {
+    println("Selecciona una opcoion: ")
+    println("1. Revisar todas las respuestas")
+    println("2. Revisar solo las respuestas Afirmativas")
+    println("3. Revisar solo las respuestas Dudosas")
+    println("4. Revisar solo las respuestas Negativas")
+
+    val opcioneIngresada = readLine()
+
+    when (opcioneIngresada) {
+        "1" -> mostrarRespuestasPorTipo()
+        "2" -> mostrarRespuestasPorTipo(tipoDeRespuesta = RESPUESTA_AFIRMATIVA)
+        "3" -> mostrarRespuestasPorTipo(tipoDeRespuesta = RESPUESTA_DUDOSA)
+        "4" -> mostrarRespuestasPorTipo(tipoDeRespuesta = RESPUESTA_NEGATIVA)
+        else -> println("Respuesta no valida. Adios.")
+    }
+
+}
+
+fun mostrarRespuestasPorTipo(tipoDeRespuesta: String = "TODOS") {
+
+    val lambdaImprimirRespuesta: (Collection<String>) -> Unit = { lista ->
+        println(lista)
+    }
+
+    when (tipoDeRespuesta) {
+        "TODOS" -> respuestas.keys.forEach { respuesta -> println(respuestas) }
+
+        RESPUESTA_AFIRMATIVA,
+
+        RESPUESTA_NEGATIVA,
+
+        RESPUESTA_DUDOSA -> respuestas.filterValues { values -> values == tipoDeRespuesta }
+            .also { listaDeRespuestas -> lambdaImprimirRespuesta(listaDeRespuestas.keys) }
+    }
+
+
+}
+
+
+fun realizarPregunta() {
+    println("Que pregunta deseas realizar?")
+    readLine()
+    println("Asi que esa era tu pregunta... la respuesta a eso es: ")
+    val respuestaGenerada = respuestas.keys.random()
+    println(respuestaGenerada)
+}
